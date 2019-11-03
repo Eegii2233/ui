@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     width: scrX,
     height: 30,
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
     borderRadius: 3,
     flexDirection: "row",
     justifyContent: "space-between",

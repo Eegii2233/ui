@@ -10,6 +10,8 @@ import Mirror from "./screens/mirror";
 import VideoPlayer from "./screens/videoplayer";
 import New from "./screens/new";
 import PDF from "./screens/pdfview";
+import Profile from "./screens/profile";
+import ProfileEdit from './screens/profile_edit';
 import { Dimensions } from "react-native";
 
 let scrX = Dimensions.get("window").width;
@@ -25,6 +27,8 @@ Navigation.registerComponent(`Home`, () => Home);
 Navigation.registerComponent(`TabView`, () => TabView);
 Navigation.registerComponent(`Lesson`, () => Lesson);
 Navigation.registerComponent(`Mirror`, () => Mirror);
+Navigation.registerComponent(`Profile`, () => Profile);
+Navigation.registerComponent(`ProfileEdit`, () => ProfileEdit);
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setDefaultOptions({

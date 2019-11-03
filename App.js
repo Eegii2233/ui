@@ -22,45 +22,65 @@ export default class App extends Component {
     };
   }
   componentDidMount() {
-    let self = this;
     this.setState({
       loading: true
     });
-    fetch("http://nothink.mn/api/lessons")
-      .then(response => response.json())
-      .then(responseJson => {
-        this.setState({
-          loading: false
-        });
-        Navigation.setStackRoot(self.props.componentId, {
-          component: {
-            id: "TabView",
-            name: "TabView",
-            passProps: {
-              data: responseJson
+    Navigation.push(this.props.componentId, {
+      component: {
+        name: "Profile",
+        passProps: {
+          text: ""
+        },
+        options: {
+          topBar: {
+            background: {
+              color: "#fdbd24"
             },
-            options: {
-              animations: {
-                setStackRoot: {
-                  enable: true
-                }
-              },
-              topBar: {
-                visible: false,
-                drawBehind: false,
-                title: {
-                  text: "",
-                  color: "#fff"
-                }
-              }
-            },
-            statusBar: {
-              visible: true,
-              style: "#fdbd24"
+            drawBehind: "false",
+            visible: "true",
+            animate: "false",
+            title: {
+              text: ""
             }
           }
-        });
-      });
+        }
+      }
+    });
+    // fetch("http://nothink.mn/api/lessons")
+    //   .then(response => response.json())
+    //   .then(responseJson => {
+    //     this.setState({
+    //       loading: false
+    //     });
+    //     Navigation.setStackRoot(self.props.componentId, {
+    //       component: {
+    //         id: "TabView",
+    //         name: "TabView",
+    //         passProps: {
+    //           data: responseJson
+    //         },
+    //         options: {
+    //           animations: {
+    //             setStackRoot: {
+    //               enable: true
+    //             }
+    //           },
+    //           topBar: {
+    //             visible: false,
+    //             drawBehind: false,
+    //             title: {
+    //               text: "",
+    //               color: "#fff"
+    //             }
+    //           }
+    //         },
+    //         statusBar: {
+    //           visible: true,
+    //           style: "#fdbd24"
+    //         }
+    //       }
+    //     });
+    //   });
   }
   render() {
     return (

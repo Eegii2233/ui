@@ -48,16 +48,19 @@ class Welcome extends Component {
         </View>
         <View style={styles.menu}>
           <View style={styles.list}>
-            <Text style={styles.text}>Lorem IPSUM</Text>
+            <Text style={styles.text}>ЭХЛЭЛ</Text>
           </View>
           <View style={styles.list}>
-            <Text style={styles.text}>Lorem IPSUM</Text>
+            <Text style={styles.text}>ЗУУН ШИНЭ ҮГ</Text>
           </View>
           <View style={styles.list}>
-            <Text style={styles.text}>Lorem IPSUM</Text>
+            <Text style={styles.text}>ТОЛЬ</Text>
           </View>
           <View style={styles.list}>
-            <Text style={styles.text}>Lorem IPSUM</Text>
+            <Text style={styles.text}>ПРОФАЙЛ</Text>
+          </View>
+          <View style={styles.list}>
+            <Text style={styles.text}>ТӨЛБӨРИЙН МЭДЭЭЛЭЛ</Text>
           </View>
         </View>
       </View>
