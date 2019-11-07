@@ -38,7 +38,7 @@ export default class Qpay extends Component {
                        <Image source={require("../images/qr.png")}/>
                         <Text style={styles.amount}>4,9000₮</Text>
                         <View style={styles.text3Stack}>
-                            <Text style={styles.text3}>АНГИЛАЛЫН ХУГАЦАА : 2 сар}</Text>
+                            <Text style={styles.text3}>АНГИЛАЛЫН ХУГАЦАА : 2 сар</Text>
                             <Text style={styles.text5}>
                                 Та тухайн QRCODE -ийг уншуулан худалдан авах боломжтой. Эсвэл
                                 доор байрлах банк дээр дарж худалдан авалт хийнэ үү.

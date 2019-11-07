@@ -5,7 +5,8 @@ import {
   Dimensions,
   Image,
   Text,
-  TextInput
+  TextInput,
+  Switch
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Navigation } from "react-native-navigation";
@@ -16,11 +17,11 @@ let scrY = Dimensions.get("window").height;
 export default class Lesson extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { lastname: "", firstname: "", email: "", password: "", passwordAgain: "", phone: "" };
+    this.state = { lastname: "", firstname: "", email: "", password: "", passwordAgain: "", phone: "", agreed: false };
   }
-  Registered() {
-    if (this.state.lastname !== "" && this.state.firstname !== "" && this.state.email !== ""
-        && this.state.password.length > 6 && this.state.password === this.state.passwordAgain
+  Registered = () => {
+    if (this.state.agreed && this.state.lastname !== "" && this.state.firstname !== "" && this.state.email !== ""
+        && this.state.password.length >= 6 && this.state.password === this.state.passwordAgain
         && this.state.phone.length === 8) {
       fetch("http://nothink.mn/api/register", {
         method: 'POST',
@@ -39,9 +40,28 @@ export default class Lesson extends React.Component {
         alert("Амжилттай бүртгэгдлээ");
         this.back();
       })
-
     }
-  }
+  };
+
+  TermOfUsage = () => {
+
+    Navigation.push("TabView", {
+      component: {
+        name: "License",
+        options: {
+          topBar: {
+            visible: true,
+            background: {
+            },
+            title: {
+              text: "Хэрэглээний нөхцөл"
+            }
+          }
+        }
+      }
+    });
+  };
+
   back() {
     Navigation.pop(this.props.componentId);
   }
@@ -93,7 +113,12 @@ export default class Lesson extends React.Component {
             secureTextEntry={true}
             value={this.state.passwordAgain}
           />
-
+          <View style={styles.term}>
+            <Switch value={this.state.agreed} onValueChange={() => this.setState({agreed: !this.state.agreed})}/>
+            <TouchableOpacity style={styles.termButton} onPress={this.TermOfUsage}>
+              <Text style={styles.termText}> Үйлчилгээний нөхцөл зөвшөөрөх </Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.buttons}>
             <TouchableOpacity onPress={this.back.bind(this)}>
               <View style={styles.button1}>
@@ -102,7 +127,7 @@ export default class Lesson extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button2}
-              onPress={this.Registered.bind(this)}
+              onPress={this.Registered}
             >
               <Text style={styles.text}>Бүртгүүлэх</Text>
             </TouchableOpacity>
@@ -169,5 +194,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     height: 30,
     justifyContent: "center"
+  },
+  term: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  termText: {
+    alignSelf: 'center',
+    color: '#fff'
+  },
+  termButton: {
+    alignSelf: 'center',
   }
 });

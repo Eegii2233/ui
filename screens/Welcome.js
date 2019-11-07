@@ -128,9 +128,9 @@ class Welcome extends Component {
                 {/*<TouchableOpacity style={styles.list}>*/}
                 {/*  <Text style={styles.text}>ЭХЛЭЛ</Text>*/}
                 {/*/!*</TouchableOpacity>*!/*/}
-                <TouchableOpacity style={styles.list} onPress={()=>this.handleClick('NewWords', '#fdbd24')}>
-                  <Text style={styles.text}>ЗУУН ШИНЭ ҮГ</Text>
-                </TouchableOpacity>
+                {/*<TouchableOpacity style={styles.list} onPress={()=>this.handleClick('NewWords', '#fdbd24')}>*/}
+                {/*  <Text style={styles.text}>ЗУУН ШИНЭ ҮГ</Text>*/}
+                {/*</TouchableOpacity>*/}
                 {/*<TouchableOpacity style={styles.list}>*/}
                 {/*  <Text style={styles.text}>ТОЛЬ</Text>*/}
                 {/*</TouchableOpacity>*/}

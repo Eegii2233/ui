@@ -12,7 +12,7 @@ export default class LectureInfo extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.item}>
-                    <Text style={styles.item_name}>1 р ангийн хичээл</Text>
+                    <Text style={styles.item_name}>1-р ангийн хичээл</Text>
                     <View style={styles.item_info}>
                         <Text style={styles.item_state}>ТӨЛӨГДСӨН</Text>
                         <Text style={styles.item_date}>2019-09-21</Text>
