@@ -5,7 +5,8 @@ import {
   View,
   Image,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from "react-native";
 
 import IconM from "react-native-vector-icons/FontAwesome";
@@ -18,53 +19,134 @@ let scrY = Dimensions.get("window").height;
 class Welcome extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: "ХАЙЛТ..." };
+    this.state = { text: "ХАЙЛТ...", name: null, token: null };
   }
+  componentDidMount() {
+    if(this.state.name === null) {
+      AsyncStorage.getItem("name").then((name) => {
+        AsyncStorage.getItem("token").then((token) => {
+          this.setState({name, token})
+        })
+        // if(token !== '') {
+        //   fetch("http://nothink.mn/api/me", {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //       "token": token
+        //     })
+        //   }).then(response => response.json()).then(jsonResponse => {
+        //     this.setState({name: jsonResponse.name});
+        //     console.log("State changed")
+        //   })
+        // }
+      });
+    }
+  }
+
+  handleSetState = (state) => {
+    this.setState({...state});
+  };
+  handleClick = (view, background) => {
+    Navigation.push(`TabView`, {
+      component: {
+        passProps: {
+          name: this.state.name,
+          token: this.state.token,
+          handleSetState: this.handleSetState
+        },
+        name: view,
+        options: {
+          topBar: {
+            drawBehind: "false",
+            visible: "true",
+            animate: "false",
+            background: {
+              color: background
+            },
+            backButton: {
+              color: 'black'
+            }
+
+          }
+        }
+      }
+    });
+  };
+
+  handleLogout = () => {
+    AsyncStorage.removeItem("token").then(() => {
+      AsyncStorage.removeItem("name").then(() => {
+        this.setState({
+          name: null,
+          token: null
+        })
+      })
+    })
+  };
+
   render() {
-    return (
-      <View style={styles.cont}>
-        <View style={styles.header}>
-          <View style={styles.input}>
-            <IconM color="#888" name="search" size={scrX * 0.07} />
-            <TextInput
-              style={styles.inputmethod}
-              onChangeText={text => this.setState({ text })}
-              value={this.state.text}
-              clearTextOnFocus={true}
-            ></TextInput>
-          </View>
-        </View>
-        <View style={styles.user}>
-          <Image
-            style={styles.userImage}
-            source={{ uri: "http://placeimg.com/640/480/any" }}
-          />
-          <View style={styles.info}>
-            <Text style={styles.text}>UserName</Text>
-            <View style={styles.button}>
-              <Text style={{ fontSize: scrX * 0.03 }}>Гарах</Text>
+
+      return (
+          <View style={styles.cont}>
+            <View style={styles.header}>
+              <View style={styles.input}>
+                <IconM color="#888" name="search" size={scrX * 0.07} />
+                <TextInput
+                    style={styles.inputmethod}
+                    onChangeText={text => this.setState({ text })}
+                    value={this.state.text}
+                    clearTextOnFocus={true}
+                ></TextInput>
+              </View>
+            </View>
+            <View style={styles.user}>
+              <Image
+                  style={styles.userImage}
+                  source={{ uri: "https://252radio.com/wp-content/uploads/2016/11/default-user-image-300x300.png" }}
+              />
+              {this.state.name !== null
+                  ? <View style={styles.info}>
+                    <Text style={styles.text}>{this.state.name}</Text>
+                    <TouchableOpacity style={styles.button} onPress={() => this.handleLogout()}>
+                      <Text style={{ fontSize: 10 }}>Гарах</Text>
+                    </TouchableOpacity>
+                  </View>
+                  : <View style={styles.info}>
+                      <Text style={styles.text}></Text>
+                      <TouchableOpacity style={styles.button} onPress={() => this.handleClick("Login", "#fdbd24")}>
+                        <Text style={{ fontSize: 16 }}>НЭВТРЭХ</Text>
+                      </TouchableOpacity>
+                  </View>}
+
+
+            </View>
+            <View style={styles.menu}>
+              {this.state.name !== null &&
+              <View >
+                {/*<TouchableOpacity style={styles.list}>*/}
+                {/*  <Text style={styles.text}>ЭХЛЭЛ</Text>*/}
+                {/*/!*</TouchableOpacity>*!/*/}
+                <TouchableOpacity style={styles.list} onPress={()=>this.handleClick('NewWords', '#fdbd24')}>
+                  <Text style={styles.text}>ЗУУН ШИНЭ ҮГ</Text>
+                </TouchableOpacity>
+                {/*<TouchableOpacity style={styles.list}>*/}
+                {/*  <Text style={styles.text}>ТОЛЬ</Text>*/}
+                {/*</TouchableOpacity>*/}
+                <TouchableOpacity style={styles.list} onPress={()=>this.handleClick('Profile', '#fdbd24')}>
+                  <Text style={styles.text}>ПРОФАЙЛ</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.list} onPress={()=>this.handleClick('Qpay', '#ffffff')}>
+                  <Text style={styles.text}>ТӨЛБӨРИЙН МЭДЭЭЛЭЛ</Text>
+                </TouchableOpacity>
+              </View>
+              }
+
             </View>
           </View>
-        </View>
-        <View style={styles.menu}>
-          <View style={styles.list}>
-            <Text style={styles.text}>ЭХЛЭЛ</Text>
-          </View>
-          <View style={styles.list}>
-            <Text style={styles.text}>ЗУУН ШИНЭ ҮГ</Text>
-          </View>
-          <View style={styles.list}>
-            <Text style={styles.text}>ТОЛЬ</Text>
-          </View>
-          <View style={styles.list}>
-            <Text style={styles.text}>ПРОФАЙЛ</Text>
-          </View>
-          <View style={styles.list}>
-            <Text style={styles.text}>ТӨЛБӨРИЙН МЭДЭЭЛЭЛ</Text>
-          </View>
-        </View>
-      </View>
-    );
+      )
+
   }
 }
 
@@ -111,17 +193,18 @@ const styles = StyleSheet.create({
     width: scrX * 0.15,
     height: scrX * 0.15,
     resizeMode: "cover",
-    borderRadius: scrX * 0.075
+    borderRadius: scrX * 0.075,
+    marginRight: 5
   },
   info: {
     paddingTop: 5
   },
   button: {
-    width: "100%",
+    // width: "100%",
     backgroundColor: "#fdbd26",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 5
+    marginTop: 10
   },
   menu: {
     marginTop: 20,

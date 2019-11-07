@@ -6,7 +6,8 @@ import {
   Image,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage,
 } from "react-native";
 import { Navigation } from "react-native-navigation";
 
@@ -16,7 +17,7 @@ let scrY = Dimensions.get("window").height;
 export default class Lesson extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { text: "", password: "" };
+    this.state = { email: props.name, password: "" };
   }
 
   toRegister() {
@@ -42,29 +43,70 @@ export default class Lesson extends React.Component {
       }
     });
   }
-  goBack() {
-    Navigation.push(this.props.componentId, {
-      component: {
-        name: "Welcome",
-        passProps: {
-          text: ""
-        },
-        options: {
-          topBar: {
-            background: {
-              color: "#fdbd24"
-            },
-            drawBehind: "false",
-            visible: "true",
-            animate: "false",
-            title: {
-              text: ""
-            }
-          }
-        }
+  // goBack() {
+  //   Navigation.push(this.props.componentId, {
+  //     component: {
+  //       name: "Welcome",
+  //       passProps: {
+  //         text: ""
+  //       },
+  //       options: {
+  //         topBar: {
+  //           background: {
+  //             color: "#fdbd24"
+  //           },
+  //           drawBehind: "false",
+  //           visible: "true",
+  //           animate: "false",
+  //           title: {
+  //             text: ""
+  //           }
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
+  handleSubmit = () => {
+    console.log("Submit clicked");
+    fetch("http://nothink.mn/api/login", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.state),
+    }).then(loginRes => loginRes.json()).then((result) => {
+      if(result.error === undefined) {
+        AsyncStorage.setItem("token", result.access_token).then(() =>
+            fetch("http://nothink.mn/api/me", {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                "token": result.access_token
+              })
+            }).then(response => response.json()).then(jsonResponse => {
+              AsyncStorage.setItem("name", jsonResponse.name).then(() => {
+                this.props.handleSetState({
+                  name: jsonResponse.name,
+                  token: result.access_token
+                });
+                Navigation.pop(this.props.componentId);
+              })
+            })
+        );
       }
+
+      // try {
+      //   await AsyncStorage.setItem('token', result.access_token);
+      // } catch (error) {
+        // Error saving data
+      // }
+
     });
-  }
+
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -76,8 +118,8 @@ export default class Lesson extends React.Component {
           <Text style={styles.text}>Мэйл хаяг</Text>
           <TextInput
             style={styles.mailInput}
-            onChangeText={text => this.setState({ text })}
-            value={this.state.text}
+            onChangeText={email => this.setState({ email })}
+            value={this.state.email}
           />
           <Text style={styles.text}>Нууц үг</Text>
           <TextInput
@@ -88,7 +130,7 @@ export default class Lesson extends React.Component {
           />
           <View style={styles.buttons}>
             <TouchableOpacity
-              onPress={this.goBack.bind(this)}
+              onPress={this.handleSubmit.bind(this)}
               style={styles.button1}
             >
               <Text style={styles.text}>Нэвтрэх</Text>

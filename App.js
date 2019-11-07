@@ -5,9 +5,11 @@ import {
   View,
   Dimensions,
   StatusBar,
-  ActivityIndicator
+  ActivityIndicator, AsyncStorage
 } from "react-native";
 import { Navigation } from "react-native-navigation";
+
+
 
 let scrX = Dimensions.get("window").width;
 let scrY = Dimensions.get("window").height;
@@ -22,65 +24,46 @@ export default class App extends Component {
     };
   }
   componentDidMount() {
+
     this.setState({
       loading: true
     });
-    Navigation.push(this.props.componentId, {
-      component: {
-        name: "Profile",
-        passProps: {
-          text: ""
-        },
-        options: {
-          topBar: {
-            background: {
-              color: "#fdbd24"
-            },
-            drawBehind: "false",
-            visible: "true",
-            animate: "false",
-            title: {
-              text: ""
+
+    fetch("http://nothink.mn/api/lessons")
+        .then(response => response.json())
+        .then(responseJson => {
+          this.setState({
+            loading: false
+          });
+          Navigation.setStackRoot(this.props.componentId, {
+            component: {
+              id: "TabView",
+              name: "TabView",
+              passProps: {
+                data: responseJson
+              },
+              options: {
+                animations: {
+                  setStackRoot: {
+                    enable: true
+                  }
+                },
+                topBar: {
+                  visible: false,
+                  drawBehind: false,
+                  title: {
+                    text: "",
+                    color: "#fff"
+                  }
+                }
+              },
+              statusBar: {
+                visible: true,
+                style: "#fdbd24"
+              }
             }
-          }
-        }
-      }
-    });
-    // fetch("http://nothink.mn/api/lessons")
-    //   .then(response => response.json())
-    //   .then(responseJson => {
-    //     this.setState({
-    //       loading: false
-    //     });
-    //     Navigation.setStackRoot(self.props.componentId, {
-    //       component: {
-    //         id: "TabView",
-    //         name: "TabView",
-    //         passProps: {
-    //           data: responseJson
-    //         },
-    //         options: {
-    //           animations: {
-    //             setStackRoot: {
-    //               enable: true
-    //             }
-    //           },
-    //           topBar: {
-    //             visible: false,
-    //             drawBehind: false,
-    //             title: {
-    //               text: "",
-    //               color: "#fff"
-    //             }
-    //           }
-    //         },
-    //         statusBar: {
-    //           visible: true,
-    //           style: "#fdbd24"
-    //         }
-    //       }
-    //     });
-    //   });
+          });
+        });
   }
   render() {
     return (

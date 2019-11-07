@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet, Dimensions, Text, Image } from "react-native";
+import { View, StyleSheet, Dimensions, Text, Image, AsyncStorage } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Home from "./home";
 import Free from "./free";
@@ -15,7 +15,7 @@ let scrY = Dimensions.get("window").height;
 const FirstRoute = () => <Home />;
 const SecondRoute = () => <Free />;
 const ThirdRoute = () => <News />;
-const FourthRoute = () => <Mirror />;
+// const FourthRoute = () => <Mirror />;
 
 export default class TabViewExample extends React.Component {
   state = {
@@ -24,9 +24,10 @@ export default class TabViewExample extends React.Component {
       { key: "first", title: "Нүүр" },
       { key: "second", title: "Үнэгүй" },
       { key: "third", title: "Мэдээ" },
-      { key: "fourth", title: "Толь" }
+      // { key: "fourth", title: "Толь" }
     ]
   };
+
 
   Login() {
     Navigation.push(this.props.componentId, {
@@ -53,12 +54,16 @@ export default class TabViewExample extends React.Component {
   }
 
   Welcome() {
+    console.log({'Comp ID': this.props.componentId});
     Navigation.mergeOptions(this.props.componentId, {
       sideMenu: {
         left: {
           enable: true,
           visible: true
-        }
+        },
+      },
+      passProps: {
+
       }
     });
   }
@@ -93,7 +98,7 @@ export default class TabViewExample extends React.Component {
             first: FirstRoute,
             second: SecondRoute,
             third: ThirdRoute,
-            fourth: FourthRoute
+            // fourth: FourthRoute
           })}
           onIndexChange={index => this.setState({ index })}
           initialLayout={{ width: scrX }}
@@ -123,7 +128,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   tab: {
-    justifyContent: "flex-end",
+    // justifyContent: "flex-end",
     alignItems: "center",
     backgroundColor: "#fdbd26",
     justifyContent: "center"

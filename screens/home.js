@@ -56,7 +56,7 @@ export default class Home extends Component {
         fetch("http://nothink.mn/api/banner")
           .then(response => response.json())
           .then(responseJson2 => {
-            console.log(responseJson2[0].image.replace("\\", "/"));
+            //console.log(responseJson2[0].image.replace("\\", "/"));
             responseJson2.map((item, i) => {
               let obj = {
                 url: `http://nothink.mn/storage/${item.image}`
@@ -127,7 +127,7 @@ export default class Home extends Component {
 
   render() {
     const { notifs, loading, lessons } = this.state;
-    console.log(notifs);
+    //console.log(notifs);
     return (
       <View style={styles.container}>
         <View style={styles.main}>

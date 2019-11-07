@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, Button, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, Button, Image, TouchableOpacity, AsyncStorage} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Navigation} from "react-native-navigation";
@@ -9,7 +9,8 @@ export default class App extends React.Component {
         super(props);
         this.state = {
             photo: {uri: 'https://252radio.com/wp-content/uploads/2016/11/default-user-image-300x300.png'},
-            name: 'Burkhan'
+            name: props.name,
+            token: props.token
         };
     }
 
@@ -20,7 +21,6 @@ export default class App extends React.Component {
         ImagePicker.launchImageLibrary(options, response => {
             if (response.uri) {
                 this.setState({photo: response});
-
             }
         });
     };
@@ -33,7 +33,8 @@ export default class App extends React.Component {
             component: {
                 name: name,
                 passProps: {
-                    text: ""
+                    token: this.state.token,
+                    name: this.state.name,
                 },
                 options: {
                     topBar: {
@@ -80,7 +81,7 @@ export default class App extends React.Component {
                             <Text style={styles.infoText}>Хэрэглэгчийн мэдээллэл</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.handleClick('ProfileEdit', 'Хичээлийн мэдээллэл')}>
+                    <TouchableOpacity onPress={() => this.handleClick('LectureInfo', 'Хичээлийн мэдээллэл')}>
                         <View style={styles.info}>
                             <MaterialCommunityIcons
                                 style={styles.infoIcon}

@@ -16,10 +16,31 @@ let scrY = Dimensions.get("window").height;
 export default class Lesson extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { text: "", password: "", passwordAgain: "", phone: "" };
+    this.state = { lastname: "", firstname: "", email: "", password: "", passwordAgain: "", phone: "" };
   }
   Registered() {
-    alert("Амжилттай бүртгэгдлээ");
+    if (this.state.lastname !== "" && this.state.firstname !== "" && this.state.email !== ""
+        && this.state.password.length > 6 && this.state.password === this.state.passwordAgain
+        && this.state.phone.length === 8) {
+      fetch("http://nothink.mn/api/register", {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lastname: this.state.lastname,
+          firstname: this.state.firstname,
+          phone: this.state.phone,
+          email: this.state.email,
+          password: this.state.password
+        }),
+      }).then(() => {
+        alert("Амжилттай бүртгэгдлээ");
+        this.back();
+      })
+
+    }
   }
   back() {
     Navigation.pop(this.props.componentId);
@@ -33,11 +54,30 @@ export default class Lesson extends React.Component {
           source={{ uri: "https://logo.clearbit.com/cinemaqualidade.to" }}
         />
         <View style={styles.input}>
+          <Text style={styles.text}>Овог</Text>
+          <TextInput
+              style={styles.mailInput}
+              onChangeText={lastname => this.setState({ lastname })}
+              value={this.state.lastname}
+          />
+          <Text style={styles.text}>Нэр</Text>
+          <TextInput
+              style={styles.mailInput}
+              onChangeText={firstname => this.setState({ firstname })}
+              value={this.state.firstname}
+          />
           <Text style={styles.text}>Мэйл хаяг</Text>
           <TextInput
             style={styles.mailInput}
-            onChangeText={text => this.setState({ text })}
-            value={this.state.text}
+            onChangeText={email => this.setState({ email })}
+            value={this.state.email}
+          />
+          <Text style={styles.text}>Утасны дугаар</Text>
+          <TextInput
+              style={styles.mailInput}
+              keyboardType={"numeric"}
+              onChangeText={phone => this.setState({ phone })}
+              value={this.state.phone}
           />
           <Text style={styles.text}>Нууц үг</Text>
           <TextInput
@@ -53,13 +93,7 @@ export default class Lesson extends React.Component {
             secureTextEntry={true}
             value={this.state.passwordAgain}
           />
-          <Text style={styles.text}>Утасны дугаар</Text>
-          <TextInput
-            style={styles.mailInput}
-            keyboardType={"numeric"}
-            onChangeText={phone => this.setState({ phone })}
-            value={this.state.phone}
-          />
+
           <View style={styles.buttons}>
             <TouchableOpacity onPress={this.back.bind(this)}>
               <View style={styles.button1}>

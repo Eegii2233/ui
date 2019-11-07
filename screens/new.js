@@ -6,8 +6,10 @@ import {
   Image,
   Text,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  WebView
 } from "react-native";
+import HTMLView from 'react-native-htmlview';
 import { Navigation } from "react-native-navigation";
 let scrX = Dimensions.get("window").width;
 let scrY = Dimensions.get("window").height;
@@ -33,10 +35,18 @@ export default class New extends React.Component {
               <Text>{move.title}</Text>
             </View>
             <View style={styles.short}>
-              <Text>{move.short_desc}</Text>
+              <HTMLView
+                  // originWhitelist={['*']}
+                  value={move.short_desc}
+              />
+              {/*<Text>{move.short_desc}</Text>*/}
             </View>
             <View style={styles.short}>
-              <Text>{move.full_desc}</Text>
+              <HTMLView
+                  // originWhitelist={['*']}
+                  value={move.full_desc}
+              />
+              {/*<Text>{move.full_desc}</Text>*/}
             </View>
           </View>
         </ScrollView>

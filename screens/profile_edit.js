@@ -1,14 +1,33 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View,TextInput,TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {StyleSheet, Text, View,TextInput,TouchableOpacity, KeyboardAvoidingView, AsyncStorage} from 'react-native';
+import {Navigation} from "react-native-navigation";
 
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            firstName: '',
-            lastName: '',
-            phoneNumber: ''
+            firstname: '',
+            lastname: '',
+            phone: '',
+            token: props.token
         };
+    }
+
+    componentDidMount() {
+        // AsyncStorage.getItem("token").then(token => {
+            // this.setState({firstname: token});
+            fetch("http://nothink.mn/api/me", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "token": this.props.token
+                })
+            }).then(res => res.json()).then(jsonRes => {
+                this.setState({firstname: jsonRes.firstname, lastname: jsonRes.lastname, phone: jsonRes.phone, token: this.state.token})
+            })
+        // })
     }
 
     handleChange = (value, name) => {
@@ -18,27 +37,37 @@ export default class App extends Component {
     };
 
     handleSubmit = () => {
-        this.setState({
-            firstName: '',
-            lastName: '',
-            phoneNumber: ''
+        fetch("http://nothink.mn/api/update", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "token": this.state.token,
+                "firstname": this.state.firstname,
+                "lastname": this.state.lastname,
+                "name": this.state.firstname,
+                "phone": this.state.phone
+            })
+        }).then(() => {
+            alert("Амжилттай бүртгэгдлээ");
+            Navigation.pop(this);
         })
     };
 
     render() {
-        const {firstName, lastName, phoneNumber} = this.state;
         return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <View>
                     <Text style={{fontSize: 18}}>Овог</Text>
-                    <TextInput value={firstName} onChange={(value) => this.handleChange(value, 'firstName')}  style={styles.textInput}></TextInput>
-                    <Text style={{fontSize: 18}}>Нэр</Text>
-                    <TextInput value={lastName} onChange={(value) => this.handleChange(value, 'lastName')} style={styles.textInput}></TextInput>
+                    <TextInput value={this.state.firstname} onChangeText={firstname => this.setState({ firstname })}  style={styles.textInput}></TextInput>
+                    <Text style={{fontSize: 18}}>Нэр {this.state.lastname}</Text>
+                    <TextInput value={this.state.lastname} onChangeText={(lastname) => this.setState({ lastname })} style={styles.textInput}></TextInput>
                     <Text style={{fontSize: 18}}>Утасны дугаар</Text>
-                    <TextInput value={phoneNumber} onChange={(value) => this.handleChange(value, 'phoneNumber')} style={styles.textInput}></TextInput>
+                    <TextInput value={this.state.phone} onChangeText={(phone) => this.setState({phone})} style={styles.textInput}></TextInput>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.btn} onPress={this.handleSubmit}><Text style={{color: 'white',fontSize: 23}}>Хадгалах</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.btn} onPress={()=>this.handleSubmit()}><Text style={{color: 'white',fontSize: 23}}>Хадгалах</Text></TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
 

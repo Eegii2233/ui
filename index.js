@@ -12,6 +12,8 @@ import New from "./screens/new";
 import PDF from "./screens/pdfview";
 import Profile from "./screens/profile";
 import ProfileEdit from './screens/profile_edit';
+import Qpay from './screens/qpay';
+import LectureInfo from "./screens/LectureInfo";
 import { Dimensions } from "react-native";
 
 let scrX = Dimensions.get("window").width;
@@ -29,6 +31,8 @@ Navigation.registerComponent(`Lesson`, () => Lesson);
 Navigation.registerComponent(`Mirror`, () => Mirror);
 Navigation.registerComponent(`Profile`, () => Profile);
 Navigation.registerComponent(`ProfileEdit`, () => ProfileEdit);
+Navigation.registerComponent(`Qpay`, () => Qpay);
+Navigation.registerComponent(`LectureInfo`, () => LectureInfo);
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setDefaultOptions({
